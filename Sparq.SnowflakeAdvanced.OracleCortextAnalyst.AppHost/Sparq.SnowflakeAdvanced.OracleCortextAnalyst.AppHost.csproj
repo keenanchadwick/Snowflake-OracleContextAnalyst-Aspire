@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.5.0" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>79637f27-9dbf-4e67-8ffa-f5de3658e6d3</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ApiService\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ApiService.csproj" />
+    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Web\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Web.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="13.3.3" />
+  </ItemGroup>
+
+</Project>
