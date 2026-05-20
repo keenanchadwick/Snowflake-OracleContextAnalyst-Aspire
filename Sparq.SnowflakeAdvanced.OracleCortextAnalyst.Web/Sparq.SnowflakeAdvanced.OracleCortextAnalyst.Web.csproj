@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Radzen.Blazor" Version="10.4.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ServiceDefaults\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ServiceDefaults.csproj" />
   </ItemGroup>
 

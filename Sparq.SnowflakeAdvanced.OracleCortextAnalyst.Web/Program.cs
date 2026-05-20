@@ -1,3 +1,4 @@
+using Radzen;
 using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Web;
 using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Web.Components;
 
@@ -7,9 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 // Add services to the container.
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
-
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddOutputCache();
 
 builder.Services.AddHttpClient<WeatherApiClient>(client =>
@@ -18,6 +17,9 @@ builder.Services.AddHttpClient<WeatherApiClient>(client =>
         // Learn more about service discovery scheme resolution at https://aka.ms/dotnet/sdschemes.
         client.BaseAddress = new("https+http://apiservice");
     });
+
+builder.Services.AddRadzenComponents();
+builder.Services.AddScoped<NotificationService>();
 
 var app = builder.Build();
 

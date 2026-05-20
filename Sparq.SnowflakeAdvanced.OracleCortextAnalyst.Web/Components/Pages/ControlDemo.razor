@@ -1,5 +1,21 @@
 ﻿@page "/controldemo"
+@inject NotificationService _notificationService
 
 <PageTitle>Radzen Controls</PageTitle>
 
-<h1>Here are some of the available Radzen controls we have available</h1>
+<h3>Here are some of the available Radzen controls we have available</h3>
+
+<RadzenButton ButtonStyle="ButtonStyle.Primary" Click="@(args => OnClick("Nice job clicking the button!"))" Text="Standard Button"></RadzenButton>
+<RadzenAlert AlertStyle="AlertStyle.Success" Variant="Variant.Flat" Shade="Shade.Lighter" Visible="@alertVisible">
+    Nice job clicking!
+</RadzenAlert>
+
+@code {
+    bool alertVisible = false;
+
+    private void OnClick(string message)
+    {
+        alertVisible = true;
+        _notificationService.Notify(NotificationSeverity.Info, "Button Clicked", message, new TimeSpan(0, 0, 5));
+    }
+}
