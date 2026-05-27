@@ -1,4 +1,4 @@
-﻿namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi.Data.Models
+﻿namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels
 {
     /// <summary>
     /// Defines the structure of the query usage log records

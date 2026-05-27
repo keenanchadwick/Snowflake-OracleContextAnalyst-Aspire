@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi.Data.Models;
+using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels;
 
 namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi.Controllers
 {
