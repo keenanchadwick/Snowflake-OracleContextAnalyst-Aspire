@@ -11,12 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ApiService\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ApiService.csproj" />
+    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi.csproj" />
     <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Web\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="13.3.4" />
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="13.3.5" />
   </ItemGroup>
 
 </Project>

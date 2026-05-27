@@ -16,6 +16,9 @@ public class SnowflakeTests
 
     const string _connectionString = "account=SPARQPARTNER-AZWUS2;user=KEENAN.CHADWICK@TEAMSPARQ.COM;authenticator=externalbrowser;db=SALES_INTELLIGENCE;schema=CORE";
 
+    /*select user_name, query_text, model, logged_at, search_latency_ms, complete_latency_ms
+from SALES_INTELLIGENCE.CORE.QUERY_USAGE_LOG order by logged_at desc*/
+
     [TestMethod]
     public void TestConnection()
     {
@@ -35,5 +38,10 @@ public class SnowflakeTests
                 }
             }
         }
+    }
+
+    [TestMethod]
+    public void TestCortex()
+    {
     }
 }

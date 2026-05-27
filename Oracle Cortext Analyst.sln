@@ -6,11 +6,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparq.SnowflakeAdvanced.Ora
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ServiceDefaults", "Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ServiceDefaults\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ServiceDefaults.csproj", "{6190960B-573F-FA5D-9772-F933B60BFBEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ApiService", "Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ApiService\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ApiService.csproj", "{7B4E13FB-D4C5-92E7-9482-84E37E964B01}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Web", "Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Web\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Web.csproj", "{D9D90118-C171-B0D7-2E9E-5CD156F4E65D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Tests", "Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Tests\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Tests.csproj", "{2BC1FCFD-E452-E67E-8CF9-D56F9638AD99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi", "Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi.csproj", "{83F75736-AF75-BAE9-7758-DEA93BDFE8D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,10 +26,6 @@ Global
 		{6190960B-573F-FA5D-9772-F933B60BFBEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6190960B-573F-FA5D-9772-F933B60BFBEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6190960B-573F-FA5D-9772-F933B60BFBEB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B4E13FB-D4C5-92E7-9482-84E37E964B01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B4E13FB-D4C5-92E7-9482-84E37E964B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B4E13FB-D4C5-92E7-9482-84E37E964B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B4E13FB-D4C5-92E7-9482-84E37E964B01}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D9D90118-C171-B0D7-2E9E-5CD156F4E65D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D9D90118-C171-B0D7-2E9E-5CD156F4E65D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9D90118-C171-B0D7-2E9E-5CD156F4E65D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -38,6 +34,10 @@ Global
 		{2BC1FCFD-E452-E67E-8CF9-D56F9638AD99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BC1FCFD-E452-E67E-8CF9-D56F9638AD99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BC1FCFD-E452-E67E-8CF9-D56F9638AD99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83F75736-AF75-BAE9-7758-DEA93BDFE8D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83F75736-AF75-BAE9-7758-DEA93BDFE8D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83F75736-AF75-BAE9-7758-DEA93BDFE8D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83F75736-AF75-BAE9-7758-DEA93BDFE8D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
