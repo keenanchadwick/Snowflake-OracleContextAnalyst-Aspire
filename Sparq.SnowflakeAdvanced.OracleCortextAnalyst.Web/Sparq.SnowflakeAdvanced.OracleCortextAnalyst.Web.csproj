@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ServiceDefaults\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ServiceDefaults.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels.csproj" />
+  </ItemGroup>
+
 </Project>

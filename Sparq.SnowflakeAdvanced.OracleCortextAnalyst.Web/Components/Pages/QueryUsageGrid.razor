@@ -1,0 +1,75 @@
+@page "/queryusage"
+@rendermode InteractiveServer
+@using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels
+@inject SalesApiClient _queryUsageClient
+@inject NotificationService _notificationService
+
+<PageTitle>Query Usage</PageTitle>
+
+<h3>Snowflake Query Usage Log</h3>
+
+<RadzenButton Icon="refresh" Text="Refresh" ButtonStyle="ButtonStyle.Secondary" Click="@LoadDataAsync" Class="mb-3" />
+
+@if (isLoading)
+{
+    <RadzenProgressBarCircular ShowValue="false" Mode="ProgressBarMode.Indeterminate" Size="ProgressBarCircularSize.Medium" />
+}
+else
+{
+    <RadzenDataGrid @ref="grid"
+                    Data="@usageItems"
+                    TItem="UsageItem"
+                    AllowFiltering="true"
+                    AllowPaging="true"
+                    AllowSorting="true"
+                    AllowColumnResize="true"
+                    PageSize="10"
+                    FilterMode="FilterMode.Advanced"
+                    EmptyText="No query usage records found.">
+        <Columns>
+            <RadzenDataGridColumn TItem="UsageItem" Property="UserName" Title="User" Width="240px" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="QueryText" Title="Query Text">
+                <Template Context="item">
+                    <span title="@item.QueryText">@Truncate(item.QueryText, 120)</span>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="UsageItem" Property="Model" Title="Model" Width="160px" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="LoggedAt" Title="Logged At" Width="180px" FormatString="{0:yyyy-MM-dd HH:mm:ss}" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="SearchLatencyMS" Title="Search (ms)" Width="120px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="CompleteLatencyMS" Title="Complete (ms)" Width="130px" TextAlign="TextAlign.Right" />
+        </Columns>
+    </RadzenDataGrid>
+}
+
+@code {
+    RadzenDataGrid<UsageItem>? grid;
+    IEnumerable<UsageItem> usageItems = Array.Empty<UsageItem>();
+    bool isLoading;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+    }
+
+    private async Task LoadDataAsync()
+    {
+        isLoading = true;
+        try
+        {
+            usageItems = await _queryUsageClient.GetQueryUsageAsync();
+            _notificationService.Notify(NotificationSeverity.Success, "Loaded", $"Retrieved {usageItems.Count()} record(s).", TimeSpan.FromSeconds(3));
+        }
+        catch (Exception ex)
+        {
+            _notificationService.Notify(NotificationSeverity.Error, "Load failed", ex.Message, TimeSpan.FromSeconds(6));
+            usageItems = Array.Empty<UsageItem>();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private static string Truncate(string? value, int max)
+        => string.IsNullOrEmpty(value) ? string.Empty : (value.Length <= max ? value : value[..max] + "…");
+}
