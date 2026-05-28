@@ -25,7 +25,7 @@ else
                     AllowColumnResize="true"
                     PageSize="10"
                     FilterMode="FilterMode.Advanced"
-                    EmptyText="No query usage records found.">
+                    EmptyText="No query usage records found. Click the Refresh button to load new data!">
         <Columns>
             <RadzenDataGridColumn TItem="UsageItem" Property="UserName" Title="User" Width="240px" />
             <RadzenDataGridColumn TItem="UsageItem" Property="QueryText" Title="Query Text">
@@ -45,11 +45,6 @@ else
     RadzenDataGrid<UsageItem>? grid;
     IEnumerable<UsageItem> usageItems = Array.Empty<UsageItem>();
     bool isLoading;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadDataAsync();
-    }
 
     private async Task LoadDataAsync()
     {
