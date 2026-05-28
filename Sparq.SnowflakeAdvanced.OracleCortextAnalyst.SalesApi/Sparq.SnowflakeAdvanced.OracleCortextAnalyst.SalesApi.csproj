@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Snowflake.Data" Version="5.6.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess.csproj" />
     <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels.csproj" />
     <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ServiceDefaults\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ServiceDefaults.csproj" />
   </ItemGroup>

@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.AppHost\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.AppHost.csproj" />
+    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess.csproj" />
+    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>

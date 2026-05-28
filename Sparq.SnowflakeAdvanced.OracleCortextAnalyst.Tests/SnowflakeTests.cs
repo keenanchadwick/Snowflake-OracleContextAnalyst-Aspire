@@ -1,4 +1,5 @@
 ﻿using Snowflake.Data.Client;
+using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,8 @@ public class SnowflakeTests
     /// <value>The test context.</value>
     public TestContext TestContext { get; set; }
 
-    const string _connectionString = "account=SPARQPARTNER-AZWUS2;user=KEENAN.CHADWICK@TEAMSPARQ.COM;authenticator=externalbrowser;db=SALES_INTELLIGENCE;schema=CORE";
+    const string _connectionString = "account=SPARQPARTNER-AZWUS2;user=KEENAN.CHADWICK@TEAMSPARQ.COM;authenticator=externalbrowser;db=SALES_INTELLIGENCE;schema=CORE",
+        _userName = "keenan.chadwick@teamsparq.com";
 
     /*select user_name, query_text, model, logged_at, search_latency_ms, complete_latency_ms
 from SALES_INTELLIGENCE.CORE.QUERY_USAGE_LOG order by logged_at desc*/
@@ -40,8 +42,16 @@ from SALES_INTELLIGENCE.CORE.QUERY_USAGE_LOG order by logged_at desc*/
         }
     }
 
+    /// <summary>
+    /// Tests the usage log accessor.
+    /// </summary>
     [TestMethod]
-    public void TestCortex()
+    public void TestUsageLogAccessor()
     {
+        UsageLogAccessor accessor = new UsageLogAccessor(_userName);
+        var usageItems = accessor.GetRecentUsage();
+
+        Assert.IsNotNull(usageItems);
+        Assert.IsTrue(usageItems.Any(), "Expected to find at least one usage item.");
     }
 }

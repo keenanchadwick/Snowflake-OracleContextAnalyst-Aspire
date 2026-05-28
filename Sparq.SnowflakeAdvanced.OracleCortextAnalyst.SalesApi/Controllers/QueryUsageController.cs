@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess;
 using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels;
 
 namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi.Controllers
@@ -31,19 +32,8 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi.Controllers
         [HttpGet(Name = "GetQueryUsage")]
         public IEnumerable<UsageItem> Get()
         {
-            List<UsageItem> items = new List<UsageItem>();
-
-            items.Add(new UsageItem()
-            {
-                UserName = "keenan.chadwick@teamsparq.com",
-                QueryText = "Test query text",
-                Model = "mistral-large2",
-                LoggedAt = DateTime.Now,
-                SearchLatencyMS = 12,
-                CompleteLatencyMS = 45
-            });
-
-            return items;
+            UsageLogAccessor usageLogAccessor = new UsageLogAccessor("keenan.chadwick@teamsparq.com");
+            return usageLogAccessor.GetRecentUsage();
         }
     }
 }
