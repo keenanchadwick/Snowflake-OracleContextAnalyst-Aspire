@@ -38,15 +38,20 @@ else
                     FilterMode="FilterMode.Advanced"
                     EmptyText="No query usage records found. Click the Refresh button to load new data!">
         <Columns>
-            <RadzenDataGridColumn TItem="UsageItem" Property="UserName" Title="User" Width="240px" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="UserName" Title="User" Width="280px" />
             <RadzenDataGridColumn TItem="UsageItem" Property="QueryText" Title="Query Text">
                 <Template Context="item">
                     <span title="@item.QueryText">@Truncate(item.QueryText, 120)</span>
                 </Template>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="UsageItem" Property="Model" Title="Model" Width="160px" />
             <RadzenDataGridColumn TItem="UsageItem" Property="LoggedAt" Title="Logged At" Width="180px" FormatString="{0:yyyy-MM-dd HH:mm:ss}" />
-            <RadzenDataGridColumn TItem="UsageItem" Property="SearchLatencyMS" Title="Search (ms)" Width="120px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="TotalTokens" Title="Tokens Used" Width="180px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="PromptTokens" Title="Prompt Tokens" Width="180px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="CompletionTokens" Title="Completion Tokens" Width="180px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="TokenCredits" Title="Token Credits" Width="180px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="Model" Title="Model" Width="160px" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="SearchResultsCount" Title="Results Count" Width="180px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="SearchLatencyMS" Title="Search (ms)" Width="130px" TextAlign="TextAlign.Right" />
             <RadzenDataGridColumn TItem="UsageItem" Property="CompleteLatencyMS" Title="Complete (ms)" Width="130px" TextAlign="TextAlign.Right" />
         </Columns>
     </RadzenDataGrid>

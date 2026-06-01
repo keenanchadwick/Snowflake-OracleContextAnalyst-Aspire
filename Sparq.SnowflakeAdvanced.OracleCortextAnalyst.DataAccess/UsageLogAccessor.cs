@@ -44,6 +44,11 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess
                             int testInt;
                             if (int.TryParse(Convert.ToString(reader["SEARCH_LATENCY_MS"]), out testInt)) { item.SearchLatencyMS = testInt; }
                             if (int.TryParse(Convert.ToString(reader["COMPLETE_LATENCY_MS"]), out testInt)) { item.CompleteLatencyMS = testInt; }
+                            if (int.TryParse(Convert.ToString(reader["PROMPT_TOKENS"]), out testInt)) { item.PromptTokens = testInt; }
+                            if (int.TryParse(Convert.ToString(reader["COMPLETION_TOKENS"]), out testInt)) { item.CompletionTokens = testInt; }
+                            if (int.TryParse(Convert.ToString(reader["TOTAL_TOKENS"]), out testInt)) { item.TotalTokens = testInt; }
+                            if (int.TryParse(Convert.ToString(reader["TOKEN_CREDITS"]), out testInt)) { item.TokenCredits = testInt; }
+                            if (int.TryParse(Convert.ToString(reader["SEARCH_RESULTS_COUNT"]), out testInt)) { item.SearchResultsCount = testInt; }
 
                             items.Add(item);
                         }
