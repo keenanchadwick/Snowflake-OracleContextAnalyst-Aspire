@@ -1,11 +1,5 @@
 ﻿using Snowflake.Data.Client;
 using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess;
-using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Tests;
 

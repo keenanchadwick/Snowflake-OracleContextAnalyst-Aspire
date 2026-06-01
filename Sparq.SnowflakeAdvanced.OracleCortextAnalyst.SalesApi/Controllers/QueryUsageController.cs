@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess;
 using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels;
 
@@ -13,16 +12,18 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi.Controllers
     [ApiController]
     public class QueryUsageController : ControllerBase
     {
-
         private readonly ILogger<QueryUsageController> _logger;
+        private readonly ISnowflakeCredentialsProvider _credentials;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QueryUsageController"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
-        public QueryUsageController(ILogger<QueryUsageController> logger)
+        /// <param name="credentials">The credentials provider.</param>
+        public QueryUsageController(ILogger<QueryUsageController> logger, ISnowflakeCredentialsProvider credentials)
         {
             _logger = logger;
+            _credentials = credentials;
         }
 
         /// <summary>
@@ -32,8 +33,8 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi.Controllers
         [HttpGet(Name = "GetQueryUsage")]
         public IEnumerable<UsageItem> Get()
         {
-            UsageLogAccessor usageLogAccessor = new UsageLogAccessor(Credentials.Username, Credentials.Password);
-            return usageLogAccessor.GetRecentUsage();
+            var accessor = new UsageLogAccessor(_credentials.Username, _credentials.Password);
+            return accessor.GetRecentUsage();
         }
     }
 }

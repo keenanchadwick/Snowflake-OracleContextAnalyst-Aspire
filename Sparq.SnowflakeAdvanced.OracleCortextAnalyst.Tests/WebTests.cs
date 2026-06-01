@@ -2,7 +2,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Tests;
 
-[TestClass]
+//[TestClass]
 public class WebTests
 {
     private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(30);

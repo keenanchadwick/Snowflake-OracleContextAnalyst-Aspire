@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels {
+namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Tests {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class Credentials {
+    internal class Credentials {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Resources.ResourceManager ResourceManager {
+        internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels.Credentials", typeof(Credentials).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Tests.Credentials", typeof(Credentials).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        public static global::System.Globalization.CultureInfo Culture {
+        internal static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels {
         /// <summary>
         ///   Looks up a localized string similar to eyJraWQiOiIxNDI4NzIxMDI2ODY3MjYiLCJhbGciOiJFUzI1NiJ9.eyJwIjoiMTQyODcyMDg3MzM0NTE0OjIxODAwNTkwMTMiLCJpc3MiOiJTRjoyMDA2IiwiZXhwIjoxNzgyOTEyNDcxfQ.jLwnjgYIwb_2nepA_lAYCGmN8CJyOO7FrXmJKmHAnyvZNmEaB4mzGf1RyL5s_UI2x-C01goiP_hFqbhz3wY6WQ.
         /// </summary>
-        public static string Password {
+        internal static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels {
         /// <summary>
         ///   Looks up a localized string similar to keenan.chadwick@teamsparq.com.
         /// </summary>
-        public static string Username {
+        internal static string Username {
             get {
                 return ResourceManager.GetString("Username", resourceCulture);
             }
