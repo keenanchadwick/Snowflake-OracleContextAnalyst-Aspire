@@ -1,5 +1,5 @@
 @page "/queryusage"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels
 @inject SalesApiClient _queryUsageClient
 @inject NotificationService _notificationService
@@ -55,24 +55,32 @@ else
 @code {
     RadzenDataGrid<UsageItem>? grid;
     RadzenDropDown<int>? pageSizeDropDown;
-    IEnumerable<UsageItem> usageItems = Array.Empty<UsageItem>();
+    List<UsageItem> usageItems = new List<UsageItem>();
     bool isLoading;
 
     int pageSize = 10;
     readonly int[] pageSizeOptions = new[] { 5, 10, 25, 50, 100 };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+        await base.OnInitializedAsync();
+    }
 
     private async Task LoadDataAsync()
     {
         isLoading = true;
         try
         {
-            usageItems = await _queryUsageClient.GetQueryUsageAsync();
-            _notificationService.Notify(NotificationSeverity.Success, "Loaded", $"Retrieved {usageItems.Count()} record(s).", TimeSpan.FromSeconds(3));
+            var result = await _queryUsageClient.GetQueryUsageAsync();
+            usageItems = result?.ToList() ?? new List<UsageItem>();
+
+            _notificationService.Notify(NotificationSeverity.Success, "Loaded", $"Retrieved {usageItems.Count} record(s).", TimeSpan.FromSeconds(3));
         }
         catch (Exception ex)
         {
             _notificationService.Notify(NotificationSeverity.Error, "Load failed", ex.Message, TimeSpan.FromSeconds(6));
-            usageItems = Array.Empty<UsageItem>();
+            usageItems.Clear();
         }
         finally
         {
