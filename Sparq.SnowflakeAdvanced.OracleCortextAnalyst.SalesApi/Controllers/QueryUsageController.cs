@@ -32,7 +32,7 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi.Controllers
         [HttpGet(Name = "GetQueryUsage")]
         public IEnumerable<UsageItem> Get()
         {
-            UsageLogAccessor usageLogAccessor = new UsageLogAccessor("keenan.chadwick@teamsparq.com");
+            UsageLogAccessor usageLogAccessor = new UsageLogAccessor(Credentials.Username, Credentials.Password);
             return usageLogAccessor.GetRecentUsage();
         }
     }

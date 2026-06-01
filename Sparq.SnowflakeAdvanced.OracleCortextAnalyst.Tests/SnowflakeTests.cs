@@ -1,5 +1,6 @@
 ﻿using Snowflake.Data.Client;
 using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess;
+using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,8 @@ public class SnowflakeTests
     /// <value>The test context.</value>
     public TestContext TestContext { get; set; }
 
-    const string _connectionString = "account=SPARQPARTNER-AZWUS2;user=KEENAN.CHADWICK@TEAMSPARQ.COM;authenticator=externalbrowser;db=SALES_INTELLIGENCE;schema=CORE",
-        _userName = "keenan.chadwick@teamsparq.com";
+    static readonly string _connectionString =
+        String.Format("account=SPARQPARTNER-AZWUS2;user={0};db=SALES_INTELLIGENCE;schema=CORE;password={1}", Credentials.Username, Credentials.Password);
 
     /*select user_name, query_text, model, logged_at, search_latency_ms, complete_latency_ms
 from SALES_INTELLIGENCE.CORE.QUERY_USAGE_LOG order by logged_at desc*/
@@ -48,7 +49,7 @@ from SALES_INTELLIGENCE.CORE.QUERY_USAGE_LOG order by logged_at desc*/
     [TestMethod]
     public void TestUsageLogAccessor()
     {
-        UsageLogAccessor accessor = new UsageLogAccessor(_userName);
+        UsageLogAccessor accessor = new UsageLogAccessor(Credentials.Username, Credentials.Password);
         var usageItems = accessor.GetRecentUsage();
 
         Assert.IsNotNull(usageItems);

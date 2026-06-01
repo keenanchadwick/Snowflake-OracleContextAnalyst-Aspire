@@ -8,7 +8,18 @@
 
 <h3>Snowflake Query Usage Log</h3>
 
-<RadzenButton Icon="refresh" Text="Refresh" ButtonStyle="ButtonStyle.Secondary" Click="@LoadDataAsync" Class="mb-3" />
+<div class="d-flex align-items-center gap-3 mb-3">
+    <RadzenButton Icon="refresh" Text="Refresh" ButtonStyle="ButtonStyle.Secondary" Click="@LoadDataAsync" />
+
+    <RadzenLabel Text="Page size:" Component="PageSizeDropdown" />
+    <RadzenDropDown @ref="pageSizeDropDown"
+                    Name="PageSizeDropdown"
+                    TValue="int"
+                    Data="@pageSizeOptions"
+                    @bind-Value="@pageSize"
+                    Change="@OnPageSizeChanged"
+                    Style="width: 100px;" />
+</div>
 
 @if (isLoading)
 {
@@ -23,7 +34,7 @@ else
                     AllowPaging="true"
                     AllowSorting="true"
                     AllowColumnResize="true"
-                    PageSize="10"
+                    PageSize="@pageSize"
                     FilterMode="FilterMode.Advanced"
                     EmptyText="No query usage records found. Click the Refresh button to load new data!">
         <Columns>
@@ -43,8 +54,12 @@ else
 
 @code {
     RadzenDataGrid<UsageItem>? grid;
+    RadzenDropDown<int>? pageSizeDropDown;
     IEnumerable<UsageItem> usageItems = Array.Empty<UsageItem>();
     bool isLoading;
+
+    int pageSize = 10;
+    readonly int[] pageSizeOptions = new[] { 5, 10, 25, 50, 100 };
 
     private async Task LoadDataAsync()
     {
@@ -62,6 +77,15 @@ else
         finally
         {
             isLoading = false;
+        }
+    }
+
+    private async Task OnPageSizeChanged(object value)
+    {
+        if (grid is not null)
+        {
+            await grid.FirstPage(true);
+            await grid.Reload();
         }
     }
 

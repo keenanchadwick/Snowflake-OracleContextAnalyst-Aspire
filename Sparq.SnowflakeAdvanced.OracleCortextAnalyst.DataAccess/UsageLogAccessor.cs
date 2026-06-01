@@ -10,7 +10,8 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess
         /// Initializes a new instance of the <see cref="UsageLogAccessor"/> class.
         /// </summary>
         /// <param name="userAccount">The user account.</param>
-        public UsageLogAccessor(string userAccount) : base(userAccount) { }
+        /// <param name="password">The password, usually the programmatic access token (PAT).</param>
+        public UsageLogAccessor(string userAccount, string password) : base(userAccount, password) { }
 
         /// <summary>
         /// Gets the recent usage.

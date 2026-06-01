@@ -21,13 +21,14 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess
         protected string ConnectionString { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DataAccessor"/> class.
+        /// Initializes a new instance of the <see cref="DataAccessor" /> class.
         /// </summary>
         /// <param name="userAccount">The user account.</param>
-        protected DataAccessor(string userAccount)
+        /// <param name="password">The password, usually the programmatic access token (PAT).</param>
+        protected DataAccessor(string userAccount, string password)
         {
-            const string connectionStringTemplate = "account=SPARQPARTNER-AZWUS2;user={0};authenticator=externalbrowser;db=SALES_INTELLIGENCE;schema=CORE";
-            ConnectionString = string.Format(connectionStringTemplate, userAccount);
+            const string connectionStringTemplate = "account=SPARQPARTNER-AZWUS2;user={0};password={1};db=SALES_INTELLIGENCE;schema=CORE";
+            ConnectionString = string.Format(connectionStringTemplate, userAccount, password);
         }
     }
 }
