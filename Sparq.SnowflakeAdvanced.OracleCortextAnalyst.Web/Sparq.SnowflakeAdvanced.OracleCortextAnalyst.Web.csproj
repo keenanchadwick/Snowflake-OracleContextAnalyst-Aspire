@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\Pages\ControlDemo.razor" />
+    <Content Remove="Components\Pages\Counter.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Radzen.Blazor" Version="10.4.5" />
   </ItemGroup>
 
