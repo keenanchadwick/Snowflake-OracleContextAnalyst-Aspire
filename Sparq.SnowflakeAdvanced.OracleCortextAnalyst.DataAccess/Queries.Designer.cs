@@ -61,7 +61,17 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to select user_name, query_text, model, logged_at, search_latency_ms, complete_latency_ms
+        ///   Looks up a localized string similar to SELECT SNOWFLAKE.CORTEX.COMPLETE(?, PARSE_JSON(?)).
+        /// </summary>
+        internal static string CortexComplete {
+            get {
+                return ResourceManager.GetString("CortexComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select USER_NAME, QUERY_TEXT, MODEL, LOGGED_AT, SEARCH_LATENCY_MS, COMPLETE_LATENCY_MS, PROMPT_TOKENS, COMPLETION_TOKENS,
+        ///    TOTAL_TOKENS, TOKEN_CREDITS, SEARCH_RESULTS_COUNT
         ///from SALES_INTELLIGENCE.CORE.QUERY_USAGE_LOG
         ///order by logged_at desc.
         /// </summary>

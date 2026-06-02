@@ -56,7 +56,7 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess
                 {
                     // CORTEX.COMPLETE supports either (model, prompt) or (model, messages_array, options).
                     // Using PARSE_JSON so the messages array is treated as ARRAY/OBJECT input.
-                    command.CommandText = "SELECT SNOWFLAKE.CORTEX.COMPLETE(?, PARSE_JSON(?))";
+                    command.CommandText = Queries.CortexComplete;
 
                     var modelParam = command.CreateParameter();
                     modelParam.ParameterName = "1";
