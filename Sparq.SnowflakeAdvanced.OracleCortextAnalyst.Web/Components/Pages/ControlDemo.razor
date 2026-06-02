@@ -1,0 +1,71 @@
+@page "/controldemo"
+@inject NotificationService _notificationService
+
+<PageTitle>Radzen Data Grid</PageTitle>
+
+<h3>Sample Radzen Data Grid</h3>
+
+<RadzenDataGrid @ref="grid" Data="@employees" TItem="Employee" AllowFiltering="true" AllowPaging="true" AllowSorting="true" PageSize="5">
+    <Columns>
+        <RadzenDataGridColumn TItem="Employee" Property="Id" Title="ID" Width="80px" />
+        <RadzenDataGridColumn TItem="Employee" Property="FirstName" Title="First Name" Width="150px" />
+        <RadzenDataGridColumn TItem="Employee" Property="LastName" Title="Last Name" Width="150px" />
+        <RadzenDataGridColumn TItem="Employee" Property="Email" Title="Email" Width="200px" />
+        <RadzenDataGridColumn TItem="Employee" Property="Department" Title="Department" Width="150px" />
+        <RadzenDataGridColumn TItem="Employee" Property="Salary" Title="Salary" Width="120px">
+            <Template Context="employee">
+                @employee.Salary.ToString("C")
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Employee" Title="Actions" Width="100px" TextAlign="TextAlign.Center">
+            <Template Context="employee">
+                <RadzenButton Icon="edit" Size="ButtonSize.Small" Class="m-1" @onclick="@(args => EditEmployee(employee))" />
+                <RadzenButton Icon="delete" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Danger" @onclick="@(args => DeleteEmployee(employee))" />
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    RadzenDataGrid<Employee> grid;
+    List<Employee> employees = new();
+
+    class Employee
+    {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string Department { get; set; }
+        public decimal Salary { get; set; }
+    }
+
+    protected override void OnInitialized()
+    {
+        // Sample data
+        employees = new List<Employee>
+        {
+            new Employee { Id = 1, FirstName = "John", LastName = "Doe", Email = "john.doe@example.com", Department = "Engineering", Salary = 95000 },
+            new Employee { Id = 2, FirstName = "Jane", LastName = "Smith", Email = "jane.smith@example.com", Department = "Product", Salary = 85000 },
+            new Employee { Id = 3, FirstName = "Bob", LastName = "Johnson", Email = "bob.johnson@example.com", Department = "Engineering", Salary = 90000 },
+            new Employee { Id = 4, FirstName = "Alice", LastName = "Williams", Email = "alice.williams@example.com", Department = "Design", Salary = 80000 },
+            new Employee { Id = 5, FirstName = "Charlie", LastName = "Brown", Email = "charlie.brown@example.com", Department = "Engineering", Salary = 92000 },
+            new Employee { Id = 6, FirstName = "Diana", LastName = "Davis", Email = "diana.davis@example.com", Department = "Product", Salary = 88000 },
+            new Employee { Id = 7, FirstName = "Edward", LastName = "Miller", Email = "edward.miller@example.com", Department = "Design", Salary = 78000 },
+            new Employee { Id = 8, FirstName = "Eva", LastName = "Wilson", Email = "eva.wilson@example.com", Department = "Engineering", Salary = 93000 }
+        };
+
+        _notificationService.Notify(NotificationSeverity.Info, "Data Loaded", "Employee grid data loaded successfully", new TimeSpan(0, 0, 5));
+    }
+
+    private void EditEmployee(Employee employee)
+    {
+        _notificationService.Notify(NotificationSeverity.Info, "Edit", $"Editing {employee.FirstName} {employee.LastName}", new TimeSpan(0, 0, 5));
+    }
+
+    private void DeleteEmployee(Employee employee)
+    {
+        employees.Remove(employee);
+        _notificationService.Notify(NotificationSeverity.Warning, "Deleted", $"{employee.FirstName} {employee.LastName} has been removed", new TimeSpan(0, 0, 5));
+    }
+}

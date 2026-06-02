@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess.csproj" />
+    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels.csproj" />
+    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ServiceDefaults\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Models\" />
+  </ItemGroup>
+
+</Project>

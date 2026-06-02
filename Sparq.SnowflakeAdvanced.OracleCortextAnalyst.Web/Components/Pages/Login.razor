@@ -1,0 +1,86 @@
+@page "/login"
+@attribute [Microsoft.AspNetCore.Authorization.AllowAnonymous]
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@using Microsoft.AspNetCore.Components.Forms
+@inject NavigationManager Nav
+
+<PageTitle>Sign In</PageTitle>
+
+<div class="d-flex justify-content-center mt-5">
+    <RadzenCard Style="width: 420px;">
+        <RadzenStack Gap="1rem">
+            <RadzenText TextStyle="TextStyle.H5">Sign in to Oracle Cortex Analyst</RadzenText>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <RadzenAlert AlertStyle="AlertStyle.Danger" Variant="Variant.Flat" Shade="Shade.Lighter" AllowClose="false">
+                    @errorMessage
+                </RadzenAlert>
+            }
+
+            <EditForm Model="Input" method="post" OnValidSubmit="LoginAsync" FormName="login">
+                <DataAnnotationsValidator />
+                <RadzenStack Gap="0.75rem">
+                    <div>
+                        <label class="form-label" for="email">Email</label>
+                        <InputText id="email" class="form-control" @bind-Value="Input.Email" autocomplete="username" />
+                        <ValidationMessage For="@(() => Input.Email)" />
+                    </div>
+                    <div>
+                        <label class="form-label" for="pat">Snowflake Programmatic Access Token</label>
+                        <InputText id="pat" type="password" class="form-control" @bind-Value="Input.PersonalAccessToken" autocomplete="current-password" />
+                        <ValidationMessage For="@(() => Input.PersonalAccessToken)" />
+                    </div>
+                    <button type="submit" class="rz-button rz-button-md rz-primary">Sign In</button>
+                </RadzenStack>
+            </EditForm>
+        </RadzenStack>
+    </RadzenCard>
+</div>
+
+@code {
+    [CascadingParameter] public HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromForm]
+    public LoginInput Input { get; set; } = new();
+
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    private string? errorMessage;
+
+    private async Task LoginAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Input.Email) || string.IsNullOrWhiteSpace(Input.PersonalAccessToken))
+        {
+            errorMessage = "Email and PAT are required.";
+            return;
+        }
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.Name, Input.Email),
+            new(ClaimTypes.Email, Input.Email),
+            new(Authentication.SnowflakeClaimTypes.PersonalAccessToken, Input.PersonalAccessToken)
+        };
+
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(identity),
+            new AuthenticationProperties { IsPersistent = true });
+
+        Nav.NavigateTo(string.IsNullOrWhiteSpace(ReturnUrl) ? "/" : ReturnUrl, forceLoad: true);
+    }
+
+    public class LoginInput
+    {
+        [System.ComponentModel.DataAnnotations.Required, System.ComponentModel.DataAnnotations.EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [System.ComponentModel.DataAnnotations.Required]
+        public string PersonalAccessToken { get; set; } = string.Empty;
+    }
+}

@@ -1,0 +1,107 @@
+@page "/queryusage"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels
+@inject SalesApiClient _queryUsageClient
+@inject NotificationService _notificationService
+
+<PageTitle>Query Usage</PageTitle>
+
+<h3>Snowflake Query Usage Log</h3>
+
+<div class="d-flex align-items-center gap-3 mb-3">
+    <RadzenButton Icon="refresh" Text="Refresh" ButtonStyle="ButtonStyle.Secondary" Click="@LoadDataAsync" />
+
+    <RadzenLabel Text="Page size:" Component="PageSizeDropdown" />
+    <RadzenDropDown @ref="pageSizeDropDown"
+                    Name="PageSizeDropdown"
+                    TValue="int"
+                    Data="@pageSizeOptions"
+                    @bind-Value="@pageSize"
+                    Change="@OnPageSizeChanged"
+                    Style="width: 100px;" />
+</div>
+
+@if (isLoading)
+{
+    <RadzenProgressBarCircular ShowValue="false" Mode="ProgressBarMode.Indeterminate" Size="ProgressBarCircularSize.Medium" />
+}
+else
+{
+    <RadzenDataGrid @ref="grid"
+                    Data="@usageItems"
+                    TItem="UsageItem"
+                    AllowFiltering="true"
+                    AllowPaging="true"
+                    AllowSorting="true"
+                    AllowColumnResize="true"
+                    PageSize="@pageSize"
+                    FilterMode="FilterMode.Advanced"
+                    EmptyText="No query usage records found. Click the Refresh button to load new data!">
+        <Columns>
+            <RadzenDataGridColumn TItem="UsageItem" Property="UserName" Title="User" Width="280px" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="QueryText" Title="Query Text">
+                <Template Context="item">
+                    <span title="@item.QueryText">@Truncate(item.QueryText, 120)</span>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="UsageItem" Property="LoggedAt" Title="Logged At" Width="180px" FormatString="{0:yyyy-MM-dd HH:mm:ss}" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="TotalTokens" Title="Tokens Used" Width="180px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="PromptTokens" Title="Prompt Tokens" Width="180px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="CompletionTokens" Title="Completion Tokens" Width="180px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="TokenCredits" Title="Token Credits" Width="180px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="Model" Title="Model" Width="160px" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="SearchResultsCount" Title="Results Count" Width="180px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="SearchLatencyMS" Title="Search (ms)" Width="130px" TextAlign="TextAlign.Right" />
+            <RadzenDataGridColumn TItem="UsageItem" Property="CompleteLatencyMS" Title="Complete (ms)" Width="130px" TextAlign="TextAlign.Right" />
+        </Columns>
+    </RadzenDataGrid>
+}
+
+@code {
+    RadzenDataGrid<UsageItem>? grid;
+    RadzenDropDown<int>? pageSizeDropDown;
+    List<UsageItem> usageItems = new List<UsageItem>();
+    bool isLoading;
+
+    int pageSize = 10;
+    readonly int[] pageSizeOptions = new[] { 5, 10, 25, 50, 100 };
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadDataAsync();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task LoadDataAsync()
+    {
+        isLoading = true;
+        try
+        {
+            var result = await _queryUsageClient.GetQueryUsageAsync();
+            usageItems = result?.ToList() ?? new List<UsageItem>();
+
+            _notificationService.Notify(NotificationSeverity.Success, "Loaded", $"Retrieved {usageItems.Count} record(s).", TimeSpan.FromSeconds(3));
+        }
+        catch (Exception ex)
+        {
+            _notificationService.Notify(NotificationSeverity.Error, "Load failed", ex.Message, TimeSpan.FromSeconds(6));
+            usageItems.Clear();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task OnPageSizeChanged(object value)
+    {
+        if (grid is not null)
+        {
+            await grid.FirstPage(true);
+            await grid.Reload();
+        }
+    }
+
+    private static string Truncate(string? value, int max)
+        => string.IsNullOrEmpty(value) ? string.Empty : (value.Length <= max ? value : value[..max] + "…");
+}

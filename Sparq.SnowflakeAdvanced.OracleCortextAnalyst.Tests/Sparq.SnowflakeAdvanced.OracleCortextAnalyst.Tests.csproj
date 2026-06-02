@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableMSTestRunner>true</EnableMSTestRunner>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.Testing" Version="13.3.5" />
+    <PackageReference Include="MSTest" Version="4.2.3" />
+    <PackageReference Include="Snowflake.Data" Version="5.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.AppHost\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.AppHost.csproj" />
+    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess.csproj" />
+    <ProjectReference Include="..\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels\Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="System.Net" />
+    <Using Include="Microsoft.Extensions.DependencyInjection" />
+    <Using Include="Aspire.Hosting.ApplicationModel" />
+    <Using Include="Aspire.Hosting.Testing" />
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Credentials.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Credentials.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Credentials.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Credentials.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

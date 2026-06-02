@@ -1,0 +1,6 @@
+@Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi_HostAddress = http://localhost:5263
+
+GET {{Sparq.SnowflakeAdvanced.OracleCortextAnalyst.SalesApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
