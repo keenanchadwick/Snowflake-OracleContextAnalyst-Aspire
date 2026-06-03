@@ -2,7 +2,6 @@
 @inherits LayoutComponentBase
 
 <div class="page">
-    @* <RadzenComponents @rendermode="InteractiveAuto" /> *@
     <div class="sidebar">
         <NavMenu />
     </div>
@@ -25,6 +24,8 @@
         </article>
     </main>
 </div>
+
+<RadzenComponents @rendermode="InteractiveServer" />
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
