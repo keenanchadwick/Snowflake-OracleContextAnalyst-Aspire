@@ -1,4 +1,4 @@
-﻿@page "/documents"
+﻿@page "/"
 @using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels
 @inject SalesApiClient SalesApi
 @inject DialogService DialogService
@@ -10,7 +10,7 @@
 <RadzenStack Gap="1rem" Class="rz-p-4">
     <RadzenText TextStyle="TextStyle.H4">Document Library</RadzenText>
     <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color);">
-        Browse, filter, and search documents indexed in SALES_INTELLIGENCE.CORE.DOCUMENTS.
+        Browse, filter, and search documents stored in Snowflake.
         Click a card to view full extracted text or ask questions scoped to that document.
     </RadzenText>
 
@@ -49,11 +49,11 @@
     }
     else
     {
-        <div class="rz-display-flex rz-flex-wrap" style="gap: 1rem;">
+        <div class="document-grid">
             @foreach (var doc in FilteredDocuments)
             {
                 <RadzenCard Variant="Variant.Outlined"
-                            Style="width: 320px; cursor: pointer;"
+                            Class="document-tile"
                             @onclick="() => OpenDocumentAsync(doc)">
                     <RadzenStack Gap="0.5rem">
                         <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
