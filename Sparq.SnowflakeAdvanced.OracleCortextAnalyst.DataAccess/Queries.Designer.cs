@@ -61,11 +61,40 @@ namespace Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataAccess {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SELECT SNOWFLAKE.CORTEX.COMPLETE(?, PARSE_JSON(?)).
+        ///   Looks up a localized string similar to SELECT SNOWFLAKE.CORTEX.COMPLETE(
+        ///    ?,
+        ///    ARRAY_CONSTRUCT(
+        ///        OBJECT_CONSTRUCT(&apos;role&apos;, &apos;system&apos;, &apos;content&apos;,
+        ///            &apos;You are a Sales Operations assistant. Answer the user&apos;&apos;s question using ONLY the provided context from contracts, slides, and transcripts. &apos; +
+        ///            &apos;If the answer isn&apos;&apos;t in the context, say you don&apos;&apos;t know. Be precise with legal terms.&apos;),
+        ///        OBJECT_CONSTRUCT(&apos;role&apos;, &apos;user&apos;, &apos;content&apos;, ?)
+        ///    ),
+        ///    OBJECT_CONSTRUCT(&apos;temperature&apos;, 0.2, &apos;max_tokens&apos;, 1024)
+        ///) AS  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string CortexComplete {
             get {
                 return ResourceManager.GetString("CortexComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT CHUNK_ID, FILE_NAME, FILE_TYPE, CHUNK_INDEX, RAW_TEXT_SEGMENT, CLEANED_TEXT_SEGMENT, SECTION_CONTEXT, EMBEDDING_VECTOR
+        ///FROM SALES_INTELLIGENCE.CORE.DOCUMENT_CHUNKS;.
+        /// </summary>
+        internal static string GetDocumentChunks {
+            get {
+                return ResourceManager.GetString("GetDocumentChunks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT FILE_NAME, FILE_TYPE, FILE_SIZE, RAW_TEXT, CLEANED_TEXT, LOADED_AT, CONTENT_HASH
+        ///FROM SALES_INTELLIGENCE.CORE.DOCUMENTS;.
+        /// </summary>
+        internal static string GetDocuments {
+            get {
+                return ResourceManager.GetString("GetDocuments", resourceCulture);
             }
         }
         
