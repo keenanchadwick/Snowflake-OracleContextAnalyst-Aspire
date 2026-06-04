@@ -121,6 +121,12 @@
   <data name="CortexComplete" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>SQL\CortexComplete.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="GetDocumentChunks" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>SQL\GetDocumentChunks.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="GetDocuments" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>SQL\GetDocuments.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="GetQueryUsage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>SQL\GetQueryUsage.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

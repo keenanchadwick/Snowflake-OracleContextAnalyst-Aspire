@@ -1,0 +1,268 @@
+﻿@page "/"
+@using Sparq.SnowflakeAdvanced.OracleCortextAnalyst.DataModels
+@inject SalesApiClient SalesApi
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+@rendermode InteractiveServer
+
+<PageTitle>Document Library</PageTitle>
+
+<RadzenStack Gap="1rem" Class="rz-p-4">
+    <RadzenText TextStyle="TextStyle.H4">Document Library</RadzenText>
+    <RadzenText TextStyle="TextStyle.Body2" Style="color: var(--rz-text-secondary-color);">
+        Browse, filter, and search documents stored in Snowflake.
+        Click a card to view full extracted text or ask questions scoped to that document.
+    </RadzenText>
+
+    <RadzenCard Variant="Variant.Outlined" Class="rz-p-3">
+        <RadzenStack Orientation="Orientation.Horizontal" Gap="1rem" AlignItems="AlignItems.End" Wrap="FlexWrap.Wrap">
+            <RadzenFormField Text="Search" Variant="Variant.Outlined" Style="min-width: 280px; flex: 1;">
+                <RadzenTextBox @bind-Value="searchText" Placeholder="File name or content..." Change="@(_ => StateHasChanged())" />
+            </RadzenFormField>
+
+            <RadzenFormField Text="File type" Variant="Variant.Outlined" Style="min-width: 220px;">
+                <RadzenDropDown TValue="string"
+                                Data="@FileTypes"
+                                @bind-Value="selectedType"
+                                AllowClear="true"
+                                Placeholder="All types"
+                                Change="@(_ => StateHasChanged())" />
+            </RadzenFormField>
+
+            <RadzenButton Icon="refresh" Text="Refresh" ButtonStyle="ButtonStyle.Light" Click="LoadAsync" IsBusy="isLoading" />
+            <RadzenBadge BadgeStyle="BadgeStyle.Info" Shade="Shade.Light"
+                         Text="@($"{FilteredDocuments.Count} of {documents.Count} documents")" />
+        </RadzenStack>
+    </RadzenCard>
+
+    @if (isLoading)
+    {
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Class="rz-p-4">
+            <RadzenProgressBarCircular ShowValue="false" Mode="ProgressBarMode.Indeterminate" Size="ProgressBarCircularSize.Large" />
+        </RadzenStack>
+    }
+    else if (!FilteredDocuments.Any())
+    {
+        <RadzenAlert AlertStyle="AlertStyle.Info" ShowIcon="true" AllowClose="false">
+            No documents match the current filters.
+        </RadzenAlert>
+    }
+    else
+    {
+        <div class="document-grid">
+            @foreach (var doc in FilteredDocuments)
+            {
+                <RadzenCard Variant="Variant.Outlined"
+                            Class="document-tile"
+                            @onclick="() => OpenDocumentAsync(doc)">
+                    <RadzenStack Gap="0.5rem">
+                        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" AlignItems="AlignItems.Center">
+                            <RadzenIcon Icon="@GetIconForType(doc.FileType)" Style="font-size: 1.75rem; color: var(--rz-primary);" />
+                            <RadzenBadge BadgeStyle="BadgeStyle.Secondary" Shade="Shade.Light" Text="@(doc.FileType ?? "unknown")" />
+                        </RadzenStack>
+
+                        <RadzenText TextStyle="TextStyle.H6" Style="margin: 0; word-break: break-word;">
+                            @doc.FileName
+                        </RadzenText>
+
+                        <RadzenStack Orientation="Orientation.Horizontal" Gap="1rem" Style="color: var(--rz-text-secondary-color); font-size: 0.85rem;">
+                            <span><RadzenIcon Icon="data_usage" Style="font-size: 1rem;" /> @FormatSize(doc.FileSize)</span>
+                            <span><RadzenIcon Icon="schedule" Style="font-size: 1rem;" /> @(doc.LoadedAt?.ToString("yyyy-MM-dd") ?? "—")</span>
+                        </RadzenStack>
+
+                        <RadzenText TextStyle="TextStyle.Body2"
+                                    Style="display:-webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                            @Preview(doc.CleanedText ?? doc.RawText)
+                        </RadzenText>
+
+                        <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" JustifyContent="JustifyContent.End">
+                            <RadzenButton Size="ButtonSize.Small" Icon="visibility" Text="View"
+                                          ButtonStyle="ButtonStyle.Light"
+                                          Click="@(args => OpenDocumentAsync(doc))"
+                                          @onclick:stopPropagation="true" />
+                            <RadzenButton Size="ButtonSize.Small" Icon="forum" Text="Ask"
+                                          ButtonStyle="ButtonStyle.Primary"
+                                          Click="@(args => AskScopedAsync(doc))"
+                                          @onclick:stopPropagation="true" />
+                        </RadzenStack>
+                    </RadzenStack>
+                </RadzenCard>
+            }
+        </div>
+    }
+</RadzenStack>
+
+@code {
+    private List<Document> documents = new();
+    private string searchText = string.Empty;
+    private string? selectedType;
+    private bool isLoading;
+
+    private IEnumerable<string> FileTypes => documents
+        .Select(d => d.FileType)
+        .Where(t => !string.IsNullOrWhiteSpace(t))
+        .Distinct(StringComparer.OrdinalIgnoreCase)
+        .OrderBy(t => t)!;
+
+    private List<Document> FilteredDocuments
+    {
+        get
+        {
+            IEnumerable<Document> q = documents;
+
+            if (!string.IsNullOrWhiteSpace(selectedType))
+            {
+                q = q.Where(d => string.Equals(d.FileType, selectedType, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchText))
+            {
+                var needle = searchText.Trim();
+                q = q.Where(d =>
+                    (d.FileName?.Contains(needle, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                    (d.CleanedText?.Contains(needle, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                    (d.RawText?.Contains(needle, StringComparison.OrdinalIgnoreCase) ?? false));
+            }
+
+            return q.OrderByDescending(d => d.LoadedAt ?? DateTime.MinValue).ToList();
+        }
+    }
+
+    protected override async Task OnInitializedAsync() => await LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        try
+        {
+            isLoading = true;
+            var result = await SalesApi.GetDocumentsAsync();
+            documents = result.ToList();
+        }
+        catch (Exception ex)
+        {
+            NotificationService.Notify(NotificationSeverity.Error, "Failed to load documents", ex.Message);
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task OpenDocumentAsync(Document doc)
+    {
+        await DialogService.OpenAsync(doc.FileName ?? "Document", ds =>
+            @<RadzenStack Gap="1rem" Style="min-width: 60vw; max-width: 80vw;">
+                <RadzenStack Orientation="Orientation.Horizontal" Gap="1rem">
+                    <RadzenBadge BadgeStyle="BadgeStyle.Info" Shade="Shade.Light" Text="@doc.FileType" />
+                    <RadzenBadge BadgeStyle="BadgeStyle.Light" Shade="Shade.Light" Text="@FormatSize(doc.FileSize)" />
+                    <RadzenBadge BadgeStyle="BadgeStyle.Light" Shade="Shade.Light"
+                                 Text="@($"Loaded {doc.LoadedAt?.ToString("yyyy-MM-dd HH:mm") ?? "—"}")" />
+                </RadzenStack>
+                <RadzenTabs>
+                    <Tabs>
+                        <RadzenTabsItem Text="Cleaned text">
+                            <RadzenTextArea Value="@doc.CleanedText" ReadOnly="true" Rows="22" Style="width: 100%;" />
+                        </RadzenTabsItem>
+                        <RadzenTabsItem Text="Raw text">
+                            <RadzenTextArea Value="@doc.RawText" ReadOnly="true" Rows="22" Style="width: 100%;" />
+                        </RadzenTabsItem>
+                    </Tabs>
+                </RadzenTabs>
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem">
+                    <RadzenButton Text="Ask about this document" Icon="forum"
+                                  ButtonStyle="ButtonStyle.Primary"
+                                  Click="@(async _ => { ds.Close(); await AskScopedAsync(doc); })" />
+                    <RadzenButton Text="Close" ButtonStyle="ButtonStyle.Light" Click="@(_ => ds.Close())" />
+                </RadzenStack>
+            </RadzenStack>,
+            new DialogOptions { Width = "70vw", Height = "80vh", Resizable = true, Draggable = true });
+    }
+
+    private async Task AskScopedAsync(Document doc)
+    {
+        var state = new AskState();
+
+        await DialogService.OpenAsync($"Ask: {doc.FileName}", ds =>
+            @<RadzenStack Gap="1rem" Style="min-width: 50vw;">
+                <RadzenFormField Text="Your question" Variant="Variant.Outlined">
+                    <RadzenTextArea @bind-Value="state.Question" Rows="3" Style="width: 100%;" />
+                </RadzenFormField>
+                <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem">
+                    <RadzenButton Text="Ask" Icon="send" IsBusy="state.Asking"
+                                  Disabled="string.IsNullOrWhiteSpace(state.Question)"
+                                  Click="@(async _ =>
+                                  {
+                                      try
+                                      {
+                                          state.Asking = true;
+                                          var resp = await SalesApi.AskDocumentAsync(
+                                              doc.FileName!,
+                                              new AskRequest { Prompt = state.Question });
+                                          state.Answer = resp.Reply;
+                                          state.Model = resp.Model;
+                                          state.ElapsedMs = resp.ElapsedMs;
+                                      }
+                                      catch (Exception ex)
+                                      {
+                                          NotificationService.Notify(NotificationSeverity.Error, "Cortex error", ex.Message);
+                                      }
+                                      finally
+                                      {
+                                          state.Asking = false;
+                                      }
+                                  })" />
+                    <RadzenButton Text="Close" ButtonStyle="ButtonStyle.Light" Click="@(_ => ds.Close())" />
+                </RadzenStack>
+
+                @if (!string.IsNullOrWhiteSpace(state.Answer))
+                {
+                    <RadzenCard Variant="Variant.Outlined">
+                        <RadzenText TextStyle="TextStyle.Subtitle2">
+                            Answer
+                            <RadzenBadge BadgeStyle="BadgeStyle.Light" Shade="Shade.Light"
+                                         Text="@($"{state.Model} · {state.ElapsedMs} ms")" Class="rz-ml-2" />
+                        </RadzenText>
+                        <RadzenText TextStyle="TextStyle.Body2" Style="white-space: pre-wrap;">@state.Answer</RadzenText>
+                    </RadzenCard>
+                }
+            </RadzenStack>,
+            new DialogOptions { Width = "60vw", Height = "auto", Resizable = true, Draggable = true });
+    }
+
+    private sealed class AskState
+    {
+        public string Question { get; set; } = string.Empty;
+        public string Answer { get; set; } = string.Empty;
+        public string Model { get; set; } = string.Empty;
+        public long ElapsedMs { get; set; }
+        public bool Asking { get; set; }
+    }
+
+    private static string GetIconForType(string? fileType) => (fileType ?? string.Empty).ToLowerInvariant() switch
+    {
+        "pdf" => "picture_as_pdf",
+        "docx" or "doc" => "description",
+        "pptx" or "ppt" => "slideshow",
+        "xlsx" or "xls" or "csv" => "table_chart",
+        "txt" or "md" => "article",
+        "vtt" or "srt" or "transcript" => "record_voice_over",
+        _ => "insert_drive_file",
+    };
+
+    private static string FormatSize(long? size)
+    {
+        if (!size.HasValue) return "—";
+        double s = size.Value;
+        string[] units = { "B", "KB", "MB", "GB" };
+        int u = 0;
+        while (s >= 1024 && u < units.Length - 1) { s /= 1024; u++; }
+        return $"{s:0.#} {units[u]}";
+    }
+
+    private static string Preview(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) return "(no text extracted)";
+        var t = text.Replace('\n', ' ').Replace('\r', ' ').Trim();
+        return t.Length > 220 ? t[..220] + "…" : t;
+    }
+}
