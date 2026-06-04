@@ -428,3 +428,4 @@ FodyWeavers.xsd
 *.msm
 *.msp
 /Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Tests/Credentials.resx
+/Sparq.SnowflakeAdvanced.OracleCortextAnalyst.Tests/Credentials.Designer.cs
